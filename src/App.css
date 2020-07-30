@@ -1,0 +1,30 @@
+.addItem{
+  position: absolute;
+  right: -15px;
+  top: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 8px 2px 8px;
+  background-color: #4384f6;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.node{
+  background: #C1D7FE;
+  color: #1E4CA0;
+  border-radius: 20px;
+  box-shadow: 10px 10px 10px rgba(0, 21, 31, 0.08);
+}
+
+.otherNode{
+  background: white;
+  color: #3D639C;
+  border-radius: 20px;
+  box-shadow: 10px 10px 10px rgba(0, 21, 31, 0.08);
+}
+
+.react-flow__handle {
+  background-color: #1E4CA0;
+}
