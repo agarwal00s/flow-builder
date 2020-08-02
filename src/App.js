@@ -20,8 +20,10 @@ const onLoad = (reactFlowInstance) => {
 };
 
 const onMoveEnd = (transform) => console.log("zoom/move end", transform);
+const onConnectStart = ({ nodeId, handleType }) => console.log('on connect start', { nodeId, handleType });
+const onConnectStop = () => console.log('on connect stop');
 
-const connectionLineStyle = { stroke: "#ddd" };
+const connectionLineStyle = { stroke: "#3C639B" };
 const snapGrid = [16, 16];
 
 const App = () => {
@@ -54,7 +56,9 @@ const App = () => {
         label: (
           <>
             Start
-            <div className="addItem" onClick={() => addNode()}>ADD</div>
+            <div className="addItem" onClick={() => addNode()}>
+              ADD
+            </div>
           </>
         ),
       },
@@ -152,24 +156,40 @@ const App = () => {
   const [elements, setElements] = useState(initialElements);
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));
-  const onConnect = (params) => setElements((els) => addEdge(params, els));
-
+  const onConnect = (params) =>
+    setElements((els) =>
+      addEdge(
+        {
+          ...params,
+          arrowHeadType: "arrowclosed",
+          type: "smoothstep",
+          style: { stroke: "#3C639B" },
+        },
+        els
+      )
+    );
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
       <ReactFlow
         elements={elements}
         onElementClick={onElementClick}
         onElementsRemove={onElementsRemove}
+        onConnectStart={onConnectStart}
+        onConnectStop={onConnectStop}
         onConnect={onConnect}
         onNodeDragStart={onNodeDragStart}
         onNodeDragStop={onNodeDragStop}
         onSelectionChange={onSelectionChange}
+        onNodeMouseEnter={(e, node) => {console.log("Node Mouse Enter",node)}}
+        onNodeMouseLeave={(e, node) => {console.log("Node Mouse Leave",node)}}
         onMoveEnd={onMoveEnd}
         onLoad={onLoad}
+        connectionLineType={'smoothstep'}
         connectionLineStyle={connectionLineStyle}
         snapToGrid={true}
         snapGrid={snapGrid}
         arrowHeadColor={"#3C639B"}
+        selectNodesOnDrag={false}
       >
         <Controls />
         <Background variant="dots" color="#E4E7E9" gap={8} size={1} />
