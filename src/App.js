@@ -20,8 +20,6 @@ const onLoad = (reactFlowInstance) => {
 };
 
 const onMoveEnd = (transform) => console.log("zoom/move end", transform);
-const onConnectStart = ({ nodeId, handleType }) => console.log('on connect start', { nodeId, handleType });
-const onConnectStop = () => console.log('on connect stop');
 
 const connectionLineStyle = { stroke: "#3C639B" };
 const snapGrid = [16, 16];
@@ -67,6 +65,9 @@ const App = () => {
     },
     {
       id: "2",
+      type: {
+
+      },
       data: {
         label: <>Two</>,
       },
@@ -153,9 +154,14 @@ const App = () => {
     },
   ];
 
+  let currentHoveredNode = null;
+  let currentDragNode = null;
   const [elements, setElements] = useState(initialElements);
-  const onElementsRemove = (elementsToRemove) =>
+  const onElementsRemove = (elementsToRemove) => {
+    console.log(elementsToRemove);
     setElements((els) => removeElements(elementsToRemove, els));
+  };
+
   const onConnect = (params) =>
     setElements((els) =>
       addEdge(
@@ -174,17 +180,38 @@ const App = () => {
         elements={elements}
         onElementClick={onElementClick}
         onElementsRemove={onElementsRemove}
-        onConnectStart={onConnectStart}
-        onConnectStop={onConnectStop}
+        onConnectStart={({ nodeId }) => {
+          currentDragNode = nodeId;
+        }}
+        onConnectStop={() => {
+          console.log(currentHoveredNode, currentDragNode);
+          if (currentDragNode && currentHoveredNode) {
+            setElements([
+              ...elements,
+              {
+                id: `e${currentDragNode}-${currentHoveredNode.id}`,
+                source: currentDragNode,
+                target: currentHoveredNode.id,
+                arrowHeadType: "arrowclosed",
+                type: "smoothstep",
+                style: { stroke: "#3C639B" },
+              },
+            ]);
+          }
+        }}
         onConnect={onConnect}
         onNodeDragStart={onNodeDragStart}
         onNodeDragStop={onNodeDragStop}
         onSelectionChange={onSelectionChange}
-        onNodeMouseEnter={(e, node) => {console.log("Node Mouse Enter",node)}}
-        onNodeMouseLeave={(e, node) => {console.log("Node Mouse Leave",node)}}
+        onNodeMouseEnter={(e, node) => {
+          currentHoveredNode = { ...node };
+        }}
+        onNodeMouseLeave={(e, node) => {
+          currentHoveredNode = null;
+        }}
         onMoveEnd={onMoveEnd}
         onLoad={onLoad}
-        connectionLineType={'smoothstep'}
+        connectionLineType={"smoothstep"}
         connectionLineStyle={connectionLineStyle}
         snapToGrid={true}
         snapGrid={snapGrid}
