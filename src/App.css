@@ -23,7 +23,6 @@
   color: #3D639C;
   border-radius: 20px;
   box-shadow: 10px 10px 10px rgba(0, 21, 31, 0.08);
-  /* -webkit-transform: rotate(45deg); */
 }
 
 .react-flow__handle {

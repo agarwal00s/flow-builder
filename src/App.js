@@ -65,9 +65,6 @@ const App = () => {
     },
     {
       id: "2",
-      type: {
-
-      },
       data: {
         label: <>Two</>,
       },
