@@ -16,6 +16,7 @@ const onSelectionChange = (elements) =>
   console.log("selection change", elements);
 const onLoad = (reactFlowInstance) => {
   console.log("flow loaded:", reactFlowInstance);
+  reactFlowInstance.fitView();
   reactFlowMethod = reactFlowInstance;
 };
 
