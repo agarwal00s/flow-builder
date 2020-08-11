@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactFlow, {
   removeElements,
   addEdge,
-  Controls,
+  // Controls,
   Background,
   isNode,
 } from "react-flow-renderer";
@@ -14,15 +14,9 @@ const onElementClick = (element) =>
   console.log(`${isNode(element) ? "node" : "edge"} click:`, element);
 const onSelectionChange = (elements) =>
   console.log("selection change", elements);
-const onLoad = (reactFlowInstance) => {
-  console.log("flow loaded:", reactFlowInstance);
-  reactFlowInstance.fitView();
-};
 
-const onMoveEnd = (transform) => console.log("zoom/move end", transform);
 
 const connectionLineStyle = { stroke: "#3C639B" };
-const snapGrid = [16, 16];
 
 const App = () => {
   const addNode = () =>
@@ -34,7 +28,7 @@ const App = () => {
           label: <>Seven</>,
         },
         className: "otherNode",
-        position: { x: 500, y: 200 },
+        position: { x: 450, y: 200 },
       },
       {
         id: "e1-7",
@@ -61,7 +55,7 @@ const App = () => {
         ),
       },
       className: "node",
-      position: { x: 250, y: 0 },
+      position: { x: 100, y: 0 },
     },
     {
       id: "2",
@@ -69,19 +63,22 @@ const App = () => {
         label: <>Two</>,
       },
       className: "otherNode",
-      position: { x: 100, y: 100 },
+      position: { x: 50, y: 100 },
     },
     {
       id: "3",
       data: {
-        label: <>Three</>,
+        label: <div>Three</div>,
       },
       className: "otherNode",
-      position: { x: 400, y: 100 },
+      position: { x: 350, y: 100 },
+      style: {
+        backgroundColor: '#FFECA4',
+      }
     },
     {
       id: "4",
-      position: { x: 250, y: 200 },
+      position: { x: 200, y: 200 },
       data: {
         label: <>Four</>,
       },
@@ -93,7 +90,7 @@ const App = () => {
         label: <>Five</>,
       },
       className: "otherNode",
-      position: { x: 250, y: 325 },
+      position: { x: 200, y: 325 },
     },
     {
       id: "6",
@@ -107,7 +104,7 @@ const App = () => {
         borderRadius: "20px",
         boxShadow: "10px 10px 10px rgba(0, 21, 31, 0.08)",
       },
-      position: { x: 250, y: 400 },
+      position: { x: 200, y: 400 },
     },
     {
       id: "e1-2",
@@ -177,12 +174,27 @@ const App = () => {
         elements={elements}
         onElementClick={onElementClick}
         onElementsRemove={onElementsRemove}
-        onConnectStart={({ nodeId }) => {
+        onConnect={onConnect}
+        onNodeDragStart={onNodeDragStart}
+        onNodeDragStop={onNodeDragStop}
+        onSelectionChange={onSelectionChange}
+        onNodeMouseEnter={(e, node) => {
+          currentHoveredNode = { ...node };
+        }}
+        onNodeMouseLeave={(e, node) => {
+          currentHoveredNode = null;
+        }}
+        connectionLineType={"smoothstep"}
+        connectionLineStyle={connectionLineStyle}
+        arrowHeadColor={"#3C639B"}
+        selectNodesOnDrag={false}
+        paneMoveable={false}
+        onConnectStart={(e, { nodeId }) => {
           currentDragNode = nodeId;
         }}
-        onConnectStop={() => {
-          console.log(currentHoveredNode, currentDragNode);
-          if (currentDragNode && currentHoveredNode) {
+        onConnectStop={(e) => {
+          console.log(currentHoveredNode, currentDragNode, e);
+          if (currentDragNode && currentHoveredNode && currentDragNode!==currentHoveredNode.id) {
             setElements([
               ...elements,
               {
@@ -195,27 +207,30 @@ const App = () => {
               },
             ]);
           }
+          else{
+            setElements([
+              ...initialElements,
+              {
+                id: "8",
+                data: {
+                  label: <>Eight</>,
+                },
+                className: "otherNode",
+                position: { x: e.clientX-90, y: e.clientY },
+              },
+              {
+                id: "e2-8",
+                source: "2",
+                target: "8",
+                arrowHeadType: "arrowclosed",
+                type: "smoothstep",
+                style: { stroke: "#3C639B" },
+              },
+            ]);
+          }
         }}
-        onConnect={onConnect}
-        onNodeDragStart={onNodeDragStart}
-        onNodeDragStop={onNodeDragStop}
-        onSelectionChange={onSelectionChange}
-        onNodeMouseEnter={(e, node) => {
-          currentHoveredNode = { ...node };
-        }}
-        onNodeMouseLeave={(e, node) => {
-          currentHoveredNode = null;
-        }}
-        onMoveEnd={onMoveEnd}
-        onLoad={onLoad}
-        connectionLineType={"smoothstep"}
-        connectionLineStyle={connectionLineStyle}
-        snapToGrid={true}
-        snapGrid={snapGrid}
-        arrowHeadColor={"#3C639B"}
-        selectNodesOnDrag={false}
       >
-        <Controls />
+        {/* <Controls /> */}
         <Background variant="dots" color="#E4E7E9" gap={8} size={1} />
       </ReactFlow>
     </div>
