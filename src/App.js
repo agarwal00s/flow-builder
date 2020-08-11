@@ -15,30 +15,9 @@ const onElementClick = (element) =>
 const onSelectionChange = (elements) =>
   console.log("selection change", elements);
 
-
 const connectionLineStyle = { stroke: "#3C639B" };
 
 const App = () => {
-  const addNode = () =>
-    setElements([
-      ...initialElements,
-      {
-        id: "7",
-        data: {
-          label: <>Seven</>,
-        },
-        className: "otherNode",
-        position: { x: 450, y: 200 },
-      },
-      {
-        id: "e1-7",
-        source: "1",
-        target: "7",
-        arrowHeadType: "arrowclosed",
-        type: "smoothstep",
-        style: { stroke: "#3C639B" },
-      },
-    ]);
 
   const initialElements = [
     {
@@ -48,14 +27,15 @@ const App = () => {
         label: (
           <>
             Start
-            <div className="addItem" onClick={() => addNode()}>
+            {/* <div className="addItem" onClick={() => addNode()}>
               ADD
-            </div>
+            </div> */}
           </>
         ),
       },
       className: "node",
       position: { x: 100, y: 0 },
+      sourcePosition: "right",
     },
     {
       id: "2",
@@ -64,6 +44,8 @@ const App = () => {
       },
       className: "otherNode",
       position: { x: 50, y: 100 },
+      targetPosition: "left",
+      sourcePosition: "right",
     },
     {
       id: "3",
@@ -73,8 +55,10 @@ const App = () => {
       className: "otherNode",
       position: { x: 350, y: 100 },
       style: {
-        backgroundColor: '#FFECA4',
-      }
+        backgroundColor: "#FFECA4",
+      },
+      targetPosition: "left",
+      sourcePosition: "right",
     },
     {
       id: "4",
@@ -83,6 +67,8 @@ const App = () => {
         label: <>Four</>,
       },
       className: "otherNode",
+      targetPosition: "left",
+      sourcePosition: "right",
     },
     {
       id: "5",
@@ -91,6 +77,8 @@ const App = () => {
       },
       className: "otherNode",
       position: { x: 200, y: 325 },
+      targetPosition: "left",
+      sourcePosition: "right",
     },
     {
       id: "6",
@@ -105,6 +93,7 @@ const App = () => {
         boxShadow: "10px 10px 10px rgba(0, 21, 31, 0.08)",
       },
       position: { x: 200, y: 400 },
+      targetPosition: "left",
     },
     {
       id: "e1-2",
@@ -194,7 +183,11 @@ const App = () => {
         }}
         onConnectStop={(e) => {
           console.log(currentHoveredNode, currentDragNode, e);
-          if (currentDragNode && currentHoveredNode && currentDragNode!==currentHoveredNode.id) {
+          if (
+            currentDragNode &&
+            currentHoveredNode &&
+            currentDragNode !== currentHoveredNode.id
+          ) {
             setElements([
               ...elements,
               {
@@ -206,8 +199,7 @@ const App = () => {
                 style: { stroke: "#3C639B" },
               },
             ]);
-          }
-          else{
+          } else {
             setElements([
               ...initialElements,
               {
@@ -216,7 +208,9 @@ const App = () => {
                   label: <>Eight</>,
                 },
                 className: "otherNode",
-                position: { x: e.clientX-90, y: e.clientY },
+                position: { x: e.clientX, y: e.clientY },
+                targetPosition: "left",
+                sourcePosition: "right",
               },
               {
                 id: "e2-8",
