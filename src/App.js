@@ -2,18 +2,22 @@ import React, { useState } from "react";
 import ReactFlow, {
   removeElements,
   addEdge,
-  // Controls,
+  Controls,
   Background,
   isNode,
 } from "react-flow-renderer";
 import "./App.css";
-
+let reactFlowMethod = null;
 const onNodeDragStart = (node) => console.log("drag start", node);
 const onNodeDragStop = (node) => console.log("drag stop", node);
 const onElementClick = (element) =>
   console.log(`${isNode(element) ? "node" : "edge"} click:`, element);
 const onSelectionChange = (elements) =>
   console.log("selection change", elements);
+const onLoad = (reactFlowInstance) => {
+  console.log("flow loaded:", reactFlowInstance);
+  reactFlowMethod = reactFlowInstance;
+};
 
 const connectionLineStyle = { stroke: "#3C639B" };
 
@@ -161,6 +165,7 @@ const App = () => {
     <div style={{ height: "100vh", width: "100vw" }}>
       <ReactFlow
         elements={elements}
+        onLoad={onLoad}
         onElementClick={onElementClick}
         onElementsRemove={onElementsRemove}
         onConnect={onConnect}
@@ -177,7 +182,7 @@ const App = () => {
         connectionLineStyle={connectionLineStyle}
         arrowHeadColor={"#3C639B"}
         selectNodesOnDrag={false}
-        paneMoveable={false}
+        paneMoveable={true}
         onConnectStart={(e, { nodeId }) => {
           currentDragNode = nodeId;
         }}
@@ -200,6 +205,7 @@ const App = () => {
               },
             ]);
           } else {
+            const pos = reactFlowMethod.project(e);
             setElements([
               ...initialElements,
               {
@@ -208,7 +214,7 @@ const App = () => {
                   label: <>Eight</>,
                 },
                 className: "otherNode",
-                position: { x: e.clientX, y: e.clientY },
+                position: { x: pos.x, y: pos.y},
                 targetPosition: "left",
                 sourcePosition: "right",
               },
@@ -224,7 +230,7 @@ const App = () => {
           }
         }}
       >
-        {/* <Controls /> */}
+        <Controls />
         <Background variant="dots" color="#E4E7E9" gap={8} size={1} />
       </ReactFlow>
     </div>
