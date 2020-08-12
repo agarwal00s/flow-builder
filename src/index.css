@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.react-flow__edge-path:hover{
+  stroke: red !important;
+  cursor: pointer;
+}

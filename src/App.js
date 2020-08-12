@@ -7,6 +7,14 @@ import ReactFlow, {
   isNode,
 } from "react-flow-renderer";
 import "./App.css";
+import ColorSelectorNode from './ColorSelectorNode';
+import CustomEdge from './CustomEdge';
+const nodeTypes = {
+  selectorNode: ColorSelectorNode,
+};
+const edgeTypes = {
+  custom: CustomEdge,
+};
 let reactFlowMethod = null;
 const onNodeDragStart = (node) => console.log("drag start", node);
 const onNodeDragStop = (node) => console.log("drag stop", node);
@@ -25,6 +33,25 @@ const connectionLineStyle = { stroke: "#3C639B" };
 const App = () => {
 
   const initialElements = [
+    {
+      id: "9",
+      type: 'selectorNode',
+      data: {
+        label: (
+          <>
+            Nine
+            {/* <div className="addItem" onClick={() => addNode()}>
+              ADD
+            </div> */}
+          </>
+        ),
+      },
+      style: {
+        background: '#FFECA4',
+        borderRadius: '20px',
+      },
+      position: { x: 200, y: 500 },
+    },
     {
       id: "1",
       type: "input",
@@ -55,7 +82,7 @@ const App = () => {
     {
       id: "3",
       data: {
-        label: <div>Three</div>,
+        label: <div><input type="text" placeholder="Three"/></div>,
       },
       className: "otherNode",
       position: { x: 350, y: 100 },
@@ -104,14 +131,18 @@ const App = () => {
       id: "e1-2",
       source: "1",
       target: "2",
+      // label: <div onClick={() => console.log('sourav')}>Sourav</div>,
+      markerEndId: "check",
       arrowHeadType: "arrowclosed",
-      type: "smoothstep",
+      type: "custom",
+      data: { text: 'S' }, 
       style: { stroke: "#3C639B" },
     },
     {
       id: "e1-3",
       source: "1",
       target: "3",
+      label: <>Sourav2</>,
       arrowHeadType: "arrowclosed",
       type: "smoothstep",
       style: { stroke: "#3C639B" },
@@ -166,6 +197,8 @@ const App = () => {
     <div style={{ height: "100vh", width: "100vw" }}>
       <ReactFlow
         elements={elements}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onLoad={onLoad}
         onElementClick={onElementClick}
         onElementsRemove={onElementsRemove}
@@ -188,12 +221,19 @@ const App = () => {
           currentDragNode = nodeId;
         }}
         onConnectStop={(e) => {
-          console.log(currentHoveredNode, currentDragNode, e);
+          console.log(currentHoveredNode, currentDragNode);
           if (
             currentDragNode &&
             currentHoveredNode &&
             currentDragNode !== currentHoveredNode.id
           ) {
+            let label =null;
+            if(currentDragNode.endsWith('a')){
+              label = 'true';
+            }
+            else if(currentDragNode.endsWith('b')){
+              label = 'false';
+            }
             setElements([
               ...elements,
               {
@@ -201,6 +241,7 @@ const App = () => {
                 source: currentDragNode,
                 target: currentHoveredNode.id,
                 arrowHeadType: "arrowclosed",
+                label: label,
                 type: "smoothstep",
                 style: { stroke: "#3C639B" },
               },
