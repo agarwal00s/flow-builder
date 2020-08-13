@@ -2,7 +2,7 @@ import React, { memo, useRef, useState, useEffect } from 'react';
 
 
 export default memo(
-  ({ x, y, label, labelStyle = {}, labelShowBg = true, labelBgStyle = {}, labelBgPadding = [2, 4], data,setEdgeHovered }) => {
+  ({ x, y, labelShowBg = true, labelBgPadding = [1, 4], data,setEdgeHovered }) => {
     const edgeRef = useRef(null);
     const [edgeTextBbox, setEdgeTextBbox] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
@@ -18,10 +18,6 @@ export default memo(
         });
       }
     }, []);
-
-    if (typeof label === 'undefined' || !label) {
-      return null;
-    }
 
     return (
       <g transform={`translate(${x - edgeTextBbox.width / 2} ${y - edgeTextBbox.height / 2})`} onMouseEnter={() => setEdgeHovered(true)} onMouseLeave={() => setEdgeHovered(false)}>
@@ -39,7 +35,6 @@ export default memo(
         )}
         <text className="react-flow__edge-text" y={edgeTextBbox.height / 2} dy="0.3em" ref={edgeRef} style={{fontFamily: 'FontAwesome'}}>
             &#xf1f8;
-          {/* {label} */}
         </text>
       </g>
     );
