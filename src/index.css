@@ -12,7 +12,14 @@ code {
     monospace;
 }
 
-.react-flow__edge-path:hover{
+/* .react-flow__edge-path:hover{
   stroke: red !important;
   cursor: pointer;
-}
+  stroke-width: 5px;
+} */
+
+/* .react-flow__edge-path #check1:hover{
+  stroke: red !important;
+  cursor: pointer;
+  stroke-width: 1.5px;
+} */

@@ -8,12 +8,13 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import "./App.css";
 import ColorSelectorNode from './ColorSelectorNode';
-import CustomEdge from './CustomEdge';
+// import CustomEdge from './CustomEdge';
+import SmoothStepEdge from './SmoothStepEdge';
 const nodeTypes = {
   selectorNode: ColorSelectorNode,
 };
 const edgeTypes = {
-  custom: CustomEdge,
+  custom: SmoothStepEdge,
 };
 let reactFlowMethod = null;
 const onNodeDragStart = (node) => console.log("drag start", node);
@@ -31,7 +32,138 @@ const onLoad = (reactFlowInstance) => {
 const connectionLineStyle = { stroke: "#3C639B" };
 
 const App = () => {
-
+  const deleteEdge = () => {
+    console.log("Delete Edge Called");
+    setElements([
+      {
+        id: "9",
+        type: 'selectorNode',
+        data: {
+          label: (
+            <>
+              Nine
+              {/* <div className="addItem" onClick={() => addNode()}>
+                ADD
+              </div> */}
+            </>
+          ),
+        },
+        style: {
+          background: '#FFECA4',
+          borderRadius: '20px',
+        },
+        position: { x: 200, y: 500 },
+      },
+      {
+        id: "1",
+        type: "input",
+        data: {
+          label: (
+            <>
+              Start
+              {/* <div className="addItem" onClick={() => addNode()}>
+                ADD
+              </div> */}
+            </>
+          ),
+        },
+        className: "node",
+        position: { x: 100, y: 0 },
+        sourcePosition: "right",
+      },
+      {
+        id: "2",
+        data: {
+          label: <>Two</>,
+        },
+        className: "otherNode",
+        position: { x: 50, y: 100 },
+        targetPosition: "left",
+        sourcePosition: "right",
+      },
+      {
+        id: "3",
+        data: {
+          label: <div><input type="text" placeholder="Three"/></div>,
+        },
+        className: "otherNode",
+        position: { x: 350, y: 100 },
+        style: {
+          backgroundColor: "#FFECA4",
+        },
+        targetPosition: "left",
+        sourcePosition: "right",
+      },
+      {
+        id: "4",
+        position: { x: 200, y: 200 },
+        data: {
+          label: <>Four</>,
+        },
+        className: "otherNode",
+        targetPosition: "left",
+        sourcePosition: "right",
+      },
+      {
+        id: "5",
+        data: {
+          label: <>Five</>,
+        },
+        className: "otherNode",
+        position: { x: 200, y: 325 },
+        targetPosition: "left",
+        sourcePosition: "right",
+      },
+      {
+        id: "6",
+        type: "output",
+        data: {
+          label: <>Response</>,
+        },
+        style: {
+          background: "#BAFFBF",
+          color: "#1E6825",
+          borderRadius: "20px",
+          boxShadow: "10px 10px 10px rgba(0, 21, 31, 0.08)",
+        },
+        position: { x: 200, y: 400 },
+        targetPosition: "left",
+      },
+      {
+        id: "e1-3",
+        source: "1",
+        target: "3",
+        label: <>Sourav2</>,
+        arrowHeadType: "arrowclosed",
+        type: "smoothstep",
+        style: { stroke: "#3C639B" },
+      },
+      {
+        id: "e3-4",
+        source: "3",
+        target: "4",
+        arrowHeadType: "arrowclosed",
+        type: "smoothstep",
+        style: { stroke: "#3C639B" },
+      },
+      {
+        id: "e4-5",
+        source: "4",
+        target: "5",
+        arrowHeadType: "arrowclosed",
+        type: "smoothstep",
+        style: { stroke: "#3C639B" },
+      },
+      {
+        id: "e5-6",
+        source: "5",
+        target: "6",
+        arrowHeadType: "arrowclosed",
+        type: "smoothstep",
+        style: { stroke: "#3C639B" },
+      },
+    ]);
+  }
   const initialElements = [
     {
       id: "9",
@@ -134,9 +266,9 @@ const App = () => {
       // label: <div onClick={() => console.log('sourav')}>Sourav</div>,
       markerEndId: "check",
       arrowHeadType: "arrowclosed",
+      label: <>Sourav</>,
       type: "custom",
-      data: { text: 'S' }, 
-      style: { stroke: "#3C639B" },
+      data: { deleteEdge: deleteEdge },
     },
     {
       id: "e1-3",
