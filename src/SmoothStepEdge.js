@@ -169,11 +169,11 @@ export default memo(
           refY="0"
         >
           <polyline
-            stroke={"green"}
+            stroke={isEdgeHovered ? 'red' : "#3C639B"}
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1"
-            fill={"green"}
+            strokeWidth="0"
+            fill={isEdgeHovered ? 'red' : "#3C639B"}
             points="-5,-4 0,0 -5,4 -5,-4"
           />
         </marker>
